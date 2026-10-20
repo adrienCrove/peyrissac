@@ -1,26 +1,60 @@
 {
   "name": "peyrissac",
-  "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Site Peyrissac et son administration (Next.js + Payload CMS)",
+  "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "oxlint",
-    "preview": "vite preview"
+    "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
+    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
+    "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
+    "lint": "cross-env NODE_OPTIONS=--no-deprecation eslint .",
+    "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
+    "start": "cross-env NODE_OPTIONS=--no-deprecation next start -p 3012",
+    "seed": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" node src/seed.ts"
   },
   "dependencies": {
-    "motion": "^14.2.0",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "react-router-dom": "^7.18.4"
+    "@payloadcms/db-postgres": "3.91.0",
+    "@payloadcms/next": "3.91.0",
+    "@payloadcms/richtext-lexical": "3.91.0",
+    "@payloadcms/ui": "3.91.0",
+    "cross-env": "^7.0.3",
+    "dotenv": "16.4.7",
+    "graphql": "^16.8.1",
+    "motion": "^14.4.0",
+    "next": "16.3.3",
+    "payload": "3.91.0",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "sharp": "0.35.4"
   },
   "devDependencies": {
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.7",
-    "@vitejs/plugin-react": "^6.1.1",
-    "oxlint": "^1.81.0",
-    "playwright": "^1.64.1",
-    "vite": "^8.3.0"
+    "@playwright/test": "1.58.2",
+    "@testing-library/react": "16.3.0",
+    "@types/node": "22.19.9",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "4.5.2",
+    "eslint": "^9.16.0",
+    "eslint-config-next": "16.3.3",
+    "jsdom": "28.0.0",
+    "prettier": "^3.4.2",
+    "tsx": "4.23.15",
+    "typescript": "5.7.3",
+    "vite-tsconfig-paths": "6.0.5",
+    "vitest": "4.0.18"
+  },
+  "engines": {
+    "node": ">=20.18.1",
+    "pnpm": "^9 || ^10 || ^11"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sharp",
+      "esbuild",
+      "unrs-resolver"
+    ]
   }
 }

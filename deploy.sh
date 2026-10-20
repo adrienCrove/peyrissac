@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-# Construit le site et le publie dans /var/www/peyrissac (servi par nginx).
+# Construit l'application (site + administration) et redémarre le service.
 set -euo pipefail
 cd "$(dirname "$0")"
+npm ci
 npm run build
-mkdir -p /var/www/peyrissac
-rsync -a --delete dist/ /var/www/peyrissac/
-chown -R www-data:www-data /var/www/peyrissac
-echo "Publié : https://peyrissac.adriennde.com"
+systemctl restart peyrissac
+echo "Publié : site, /admin et /api (port 3012)"
