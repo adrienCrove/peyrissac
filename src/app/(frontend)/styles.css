@@ -76,9 +76,9 @@ button, input { font: inherit; color: inherit; }
   font-size: clamp(28px, 4.375vw, 120px); line-height: 1;
   letter-spacing: -0.036em;
 }
-.entete { position: fixed; inset: clamp(20px,3.2vw,56px) var(--marge) auto; z-index: 20; pointer-events: none; }
+.entete { position: absolute; inset: clamp(20px,3.2vw,56px) var(--marge) auto; z-index: 20; pointer-events: none; }
 .entete a { pointer-events: auto; }
-.entete--clair { color: var(--creme); }
+.entete--clair { color: var(--creme); position: fixed; }
 .entete-espace { height: clamp(60px, 7vw, 135px); }
 
 /* Pied */
@@ -198,6 +198,7 @@ button, input { font: inherit; color: inherit; }
 
 @media (max-width: 860px) {
   .entete { flex-wrap: wrap; }
+  .entete-espace { height: 170px; }
   .entete__nav { order: 3; flex-basis: 100%; align-items: flex-start; padding-top: 1.4em; }
   .titre-page { white-space: normal; }
   .listes { grid-template-columns: 1fr; }

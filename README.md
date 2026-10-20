@@ -91,24 +91,28 @@ npm run seed   # sans effet si des familles existent déjà
 
 Le seed lit `src/site/data/*.js` et `public/images`.
 
-**B. Copier l'existant depuis l'ancien serveur** (recommandé pour retrouver le contenu à l'identique)
+**B. Restaurer le contenu existant** (recommandé pour retrouver le site à l'identique)
 
-Sur l'ancien serveur :
+Le dossier [restore/](restore/) contient :
+- `contenu.sql` : le contenu éditorial (familles, interviews, archives, informations, media). Il ne contient **ni comptes, ni mots de passe, ni sessions** : le dépôt est public.
+- `media.tgz` : les images envoyées via l'admin.
 
-```bash
-pg_dump -U peyrissac -h 127.0.0.1 peyrissac > peyrissac.sql
-tar czf media.tgz -C /root/peyrissac media
-scp peyrissac.sql media.tgz nouveau-serveur:/root/
-```
-
-Sur le nouveau serveur, **avant** de lancer l'admin (ne pas exécuter `migrate` dans ce cas) :
+Procédure, dans cet ordre :
 
 ```bash
-psql -U peyrissac -h 127.0.0.1 peyrissac < /root/peyrissac.sql
-tar xzf /root/media.tgz -C /root/peyrissac
+cd /root/peyrissac
+npm run payload migrate                       # crée le schéma (obligatoire avant le SQL)
+set -a; . ./.env; set +a                      # charge DATABASE_URL
+psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f restore/contenu.sql
+tar xzf restore/media.tgz                     # recrée le dossier media/
 ```
 
-Le dossier `media/` (images envoyées via l'admin) et la base ne sont **pas** dans git : sans eux, les images manquent.
+Puis ouvrir `/admin` et **créer le compte administrateur** s'il n'existe pas déjà (les comptes ne sont pas dans le dump).
+
+Remarques :
+- `contenu.sql` **remplace** tout le contenu existant ; les utilisateurs ne sont pas touchés. Il peut être rejoué sans risque.
+- Lancer `migrate` avant, sinon `relation ... does not exist`.
+- `media/` doit appartenir à l'utilisateur qui lance le service ; les noms de fichiers doivent rester identiques à ceux de la base.
 
 ### 5. Service systemd
 
